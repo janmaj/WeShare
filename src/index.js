@@ -6,8 +6,8 @@ import {
   applyMiddleware,
   compose,
   combineReducers,
-  Provider,
-} from "react-redux";
+} from "redux";
+import {Provider} from 'react-redux'
 import authReducer from "./store/reducers/auth";
 import thunk from "redux-thunk";
 
