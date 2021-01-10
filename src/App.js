@@ -6,6 +6,7 @@ import ThemeProvider from '@material-ui/styles/ThemeProvider';
 import theme from './theme';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import Feed from './pages/Feed';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Switch>
           <Route path="/login" exact render={() => <Login />} />
           <Route path="/signup" exact render={() => <Signup />} />
+          <Route path="/" exact render={() => <Feed />} />
         </Switch>
       </BrowserRouter>
       </ThemeProvider>

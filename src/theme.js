@@ -32,6 +32,15 @@ const theme = createMuiTheme({
 		h2:{
 			fontFamily: "Lobster",
 			fontSize: "3rem",
+		},
+		subtitle1:{
+			color: blue
+		},
+		subtitle2:{
+			color: blue
+		},
+		caption: {
+			color: darkBlue
 		}
 	},
 	overrides:{
@@ -46,7 +55,7 @@ const theme = createMuiTheme({
 			root: {
 				backgroundColor: gray[100]
 			}
-		}
+		},
 	},
 	props: {
 		MuiTabs:{
@@ -55,7 +64,7 @@ const theme = createMuiTheme({
 					backgroundColor: "transparent"
 				}
 			}
-		}
+		},
 	}
 });
 
