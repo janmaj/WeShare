@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme=>({
 	}
 }));
 
-const Navbar = ({activeTab, authenticated})=>{
+const Navbar = ({activeTab, authenticated, handleLogout})=>{
 	const classes = useStyles();
 	let tabs = (
     <Tabs value={activeTab}>
@@ -77,7 +77,7 @@ const Navbar = ({activeTab, authenticated})=>{
 						selected={true}
 					/>
 				</Tabs>
-				<Button variant="contained" color="secondary" className={classes.logoutButton} endIcon={<ExitToAppIcon />}>
+				<Button variant="contained" color="secondary" className={classes.logoutButton} endIcon={<ExitToAppIcon/>} onClick={handleLogout}>
 					Log Out
 				</Button>
 			</React.Fragment>
