@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Navbar from '../components/Navbar';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
+import Snackbar from '@material-ui/core/Snackbar';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
 import {makeStyles} from '@material-ui/core/styles';
 import {connect} from 'react-redux';
 import {useHistory} from 'react-router-dom';
@@ -15,12 +17,23 @@ import * as actions from '../store/actions';
 const useStyles = makeStyles(theme => ({
 	feedTitle: {
 		color: theme.palette.common.darkBlue
-	}
+	},
+	snackBar:{
+    backgroundColor: theme.palette.error.main
+  }
 }));
 
-const Feed = ({logout, isAuth, ...props})=>{
+const Feed = ({logout, isAuth, error, clearError, ...props})=>{
 	const classes = useStyles();
 	const history = useHistory();
+	const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+	useEffect(() =>{
+		if(error){
+			setSnackbarOpen(true);
+			clearError();
+		}
+	}, [error, setSnackbarOpen, clearError]);
 
 	const handleLogout = () => {
 		logout();
@@ -44,23 +57,31 @@ const Feed = ({logout, isAuth, ...props})=>{
 						</Grid>
 					</Grid>
 					<Grid item lg={5}>
-						<NewPost style={{position: "fixed"}}/>
+						<NewPost style={{position: "fixed"}} onSubmit={post => props.submitPost(post)} loading={props.loadingSubmit}/>
 					</Grid>
 				</Grid>
 			</Container>
+			<Snackbar classes={{root: classes.snackBar}} open={snackbarOpen} onClose={() => setSnackbarOpen(false)}>
+        <SnackbarContent message={"Something went wrong. Try again later"} classes={{root: classes.snackBar}}/>
+      </Snackbar>
 		</React.Fragment>
 	);
 };
 
 const mapStateToProps = state => {
 	return {
-		isAuth: state.auth.isAuth
+		isAuth: state.auth.isAuth,
+		error: state.feed.error,
+		loadingSubmit: state.feed.loadingSubmit,
+		posts: state.feed.posts,
 	};
 };
 
 const mapDispatchToProps = dispatch => {
 	return {
-		logout: () => dispatch(actions.logout())
+		logout: () => dispatch(actions.logout()),
+		submitPost: post => dispatch(actions.addPost(post)),
+		clearError: () => dispatch(actions.clearError())
 	};
 };
 

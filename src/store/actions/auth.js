@@ -93,9 +93,3 @@ export const logout = () => {
 		type: actionTypes.LOGOUT
 	};
 };
-
-export const clearError = () => {
-	return{
-		type: actionTypes.CLEAR_ERROR
-	};
-};

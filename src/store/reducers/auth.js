@@ -57,7 +57,7 @@ const reducer = (state = defaultState, action) => {
 				refreshToken: null,
 				expiresIn: null,
 				localId: null,
-				displayName: false
+				displayName: null
 			}
 		case actionTypes.CLEAR_ERROR:
 			return {

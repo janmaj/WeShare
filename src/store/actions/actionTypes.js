@@ -9,3 +9,8 @@ export const LOGIN_FAIL = 'LOGIN_FAIL';
 export const LOGOUT = 'LOGOUT'
 
 export const CLEAR_ERROR = 'CLEAR_ERROR';
+export const RESET_CLEAR_INPUT = 'RESET_CLEAR_INPUT';
+
+export const ADD_POST_START = 'ADD_POST_START';
+export const ADD_POST_SUCCESS = 'ADD_POST_SUCESS';
+export const ADD_POST_FAIL = 'ADD_POST_FAIL';
