@@ -36,7 +36,6 @@ const reducer = (state = defaultState, action) => {
 				loading: false
 			}
 		case actionTypes.LOGIN_SUCCESS:
-			console.log(action)
 			return {
 				...state,
 				redirectPath: '/',

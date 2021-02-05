@@ -10,6 +10,8 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import MessageIcon from '@material-ui/icons/Message';
 import IconButton from '@material-ui/core/IconButton';
 
+import {calculatePostAge} from '../utils';
+
 const useStyles = makeStyles(theme => ({
 	avatar:{
 		width: 60,
@@ -18,10 +20,11 @@ const useStyles = makeStyles(theme => ({
 	authorName:{
 		fontWeight: 600,
 		fontSize: "1.1rem",
-		color: theme.palette.primary.main
+		color: theme.palette.primary.main,
 	},
 	content: {
-		marginTop: theme.spacing(2)
+		marginTop: theme.spacing(2),
+		marginLeft: theme.spacing(2)
 	},
 	heartIcon:{
 		color: theme.palette.common.crimson
@@ -43,15 +46,15 @@ const Post = ({author, createdAt, content, likes, comments})=>{
 					</Grid>
 					<Grid item>
 						<Typography variant="subtitle1" className={classes.authorName}>
-							Author
+							{author}
 						</Typography>
 						<Typography variant="caption">
-							3h ago
+							{calculatePostAge(createdAt)}
 						</Typography>
 					</Grid>
 				</Grid>
 				<Typography className={classes.content}>
-					Hi, this is my first post please don't be too mean. Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates nihil asperiores reiciendis provident quas vero?
+					{content}
 				</Typography>
 			</CardContent>
 			<CardActions>

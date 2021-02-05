@@ -6,7 +6,8 @@ export {
 
 export {
 	addPost,
-	resetClearInput
+	resetClearInput,
+	fetchPosts
 }from './feed.js';
 
 export{

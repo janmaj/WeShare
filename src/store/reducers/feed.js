@@ -3,6 +3,7 @@ import * as actionTypes from '../actions/actionTypes';
 const defaultState = {
 	posts: [],
 	loadingSubmit: false,
+	loadingFeed: false,
 	error: null,
 	clearInput: false
 };
@@ -25,6 +26,24 @@ const reducer = (state = defaultState, action) => {
 			return {
 				...state,
 				loadingSubmit: false,
+				error: action.error
+			};
+		case actionTypes.FETCH_POSTS_START: 
+			return{
+				...state,
+				loadingFeed: true
+			};
+		case actionTypes.FETCH_POSTS_SUCCESS:
+			return {
+				...state,
+				loadingFeed: false,
+				posts: action.posts,
+				clearInput: true
+			};
+		case actionTypes.FETCH_POSTS_FAIL:
+			return {
+				...state,
+				loadingFeed: false,
 				error: action.error
 			};
 		case actionTypes.RESET_CLEAR_INPUT:

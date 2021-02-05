@@ -5,6 +5,7 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import {makeStyles} from '@material-ui/core/styles';
 import {connect} from 'react-redux';
 import {useHistory} from 'react-router-dom';
@@ -23,11 +24,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Feed = ({logout, isAuth, error, clearError, ...props})=>{
+const Feed = ({logout, isAuth, error, clearError, posts, loadingFeed, fetchPosts, ...props})=>{
 	const classes = useStyles();
 	const history = useHistory();
 	const [snackbarOpen, setSnackbarOpen] = useState(false);
 
+	useEffect(()=>{
+		fetchPosts();
+	}, [fetchPosts]);
+	
 	useEffect(() =>{
 		if(error){
 			setSnackbarOpen(true);
@@ -53,7 +58,7 @@ const Feed = ({logout, isAuth, error, clearError, ...props})=>{
 					</Grid>
 					<Grid item container lg={7} direction="column">
 						<Grid item>
-							<PostList />
+							{loadingFeed ? <CircularProgress /> : <PostList posts={posts}/>}
 						</Grid>
 					</Grid>
 					<Grid item lg={5}>
@@ -74,6 +79,7 @@ const mapStateToProps = state => {
 		error: state.feed.error,
 		loadingSubmit: state.feed.loadingSubmit,
 		posts: state.feed.posts,
+		loadingFeed: state.feed.loadingFeed
 	};
 };
 
@@ -81,7 +87,8 @@ const mapDispatchToProps = dispatch => {
 	return {
 		logout: () => dispatch(actions.logout()),
 		submitPost: post => dispatch(actions.addPost(post)),
-		clearError: () => dispatch(actions.clearError())
+		clearError: () => dispatch(actions.clearError()),
+		fetchPosts: () => dispatch(actions.fetchPosts())
 	};
 };
 

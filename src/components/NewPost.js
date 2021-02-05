@@ -39,8 +39,11 @@ const NewPost = ({onSubmit, loading, userName, clearInput, resetClearInput, ...p
 
   const handleSubmit = () => {
     const post = {
-      text: postContents,
-      author: userName
+      content: postContents,
+      author: userName,
+      createdAt: new Date(),
+      likes: [],
+      comments: []
     };
     onSubmit(post);
   };

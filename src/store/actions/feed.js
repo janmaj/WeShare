@@ -50,3 +50,39 @@ export const resetClearInput = () => {
 	};
 };
 
+export const fetchPosts = () => {
+	return async dispatch => {
+		dispatch(fetchPostsStart());
+		try{
+			const querySnapshot = await db.collection("posts").get();
+			const posts = querySnapshot.docs.map(doc => ({
+				id: doc.id,
+				...doc.data()
+			}));
+			dispatch(fetchPostsSuccess(posts));
+		}catch(error){
+			dispatch(fetchPostsFail(error));
+		}
+	};
+};
+
+const fetchPostsStart = () => {
+	return {
+		type: actionTypes.FETCH_POSTS_START
+	};
+};
+
+const fetchPostsSuccess = posts => {
+	return {
+		type: actionTypes.FETCH_POSTS_SUCCESS,
+		posts
+	};
+};
+
+const fetchPostsFail = error => {
+	console.log(error);
+	return {
+		type: actionTypes.FETCH_POSTS_FAIL,
+		error
+	};
+};

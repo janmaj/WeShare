@@ -7,7 +7,6 @@ export const registerUser = (email, password, username) => {
 	return async dispatch => {
 		dispatch(registerStart());
 		try{
-			console.log({username});
 			const authData = {
         email,
         password,
@@ -57,11 +56,9 @@ export const loginUser = (email, password) => {
 			const response = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`, authData);
 			const idToken = response.data.idToken;
 			const data = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${API_KEY}`, {idToken});
-			console.log(data.data);
 			//response.data.displayName = displayName;
 			dispatch(loginSuccess(response.data));
 		}catch(error){
-			console.log(error.response.data.error.message)
 			error.message = error.response.data.error.message
 			dispatch(loginFail(error));
 		}
