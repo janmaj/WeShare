@@ -16,7 +16,8 @@ export const addPost = post => {
 		try{
 			dispatch(addPostStart());
 			const docRef = await db.collection('posts').add(post);
-			dispatch(addPostSuccess(post, docRef));
+			post.id = docRef.id;
+			dispatch(addPostSuccess(post));
 		}catch(error){
 			dispatch(addPostFail(error));
 		}
@@ -29,11 +30,10 @@ const addPostStart = () =>{
 	};
 };
 
-const addPostSuccess = (post, docRef) =>{
+const addPostSuccess = (post) =>{
 	return {
 		type: actionTypes.ADD_POST_SUCCESS,
 		post,
-		docRef
 	};
 };
 
@@ -83,6 +83,33 @@ const fetchPostsFail = error => {
 	console.log(error);
 	return {
 		type: actionTypes.FETCH_POSTS_FAIL,
+		error
+	};
+};
+
+export const updatePost = (id, post) => {
+	return async dispatch => {
+		try{
+			console.log({id});
+			await db.collection('posts').doc(id).set(post);
+			dispatch(updatePostSuccess(id, post));
+		}catch(error){
+			dispatch(updatePostFail(error));
+		}
+	}
+};
+
+const updatePostSuccess  = (id, post) => {
+	return {
+		type: actionTypes.UPDATE_POST_SUCCESS,
+		id, 
+		post
+	};
+};
+
+const updatePostFail = (error) => {
+	return {
+		type: actionTypes.UPDATE_POST_FAIL,
 		error
 	};
 };

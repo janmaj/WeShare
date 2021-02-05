@@ -46,6 +46,21 @@ const reducer = (state = defaultState, action) => {
 				loadingFeed: false,
 				error: action.error
 			};
+		case actionTypes.UPDATE_POST_SUCCESS:
+			const newPosts = state.posts.map(post => {
+				if(post.id === action.id){
+					return action.post
+				}
+				return post
+			});
+			return {
+				...state,
+				posts: newPosts
+			}
+		case actionTypes.UPDATE_POST_FAIL:
+			return {
+				error: action.error
+			}
 		case actionTypes.RESET_CLEAR_INPUT:
 			return {
 				...state,

@@ -55,8 +55,7 @@ export const loginUser = (email, password) => {
       };
 			const response = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`, authData);
 			const idToken = response.data.idToken;
-			const data = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${API_KEY}`, {idToken});
-			//response.data.displayName = displayName;
+			await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${API_KEY}`, {idToken});
 			dispatch(loginSuccess(response.data));
 		}catch(error){
 			error.message = error.response.data.error.message
