@@ -2,6 +2,7 @@ export {
 	registerUser,
 	loginUser,
 	logout,
+	autoLogin
 } from './auth';
 
 export {

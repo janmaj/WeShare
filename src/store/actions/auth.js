@@ -2,6 +2,7 @@ import axios from 'axios';
 import * as actionTypes from './actionTypes';
 
 const API_KEY = 'AIzaSyB3b_Y9pmVLPn2KyiAxQ7NitJ2obeYRSm0';
+const MILLISECONDS_IN_SECOND = 1000;
 
 export const registerUser = (email, password, username) => {
 	return async dispatch => {
@@ -53,12 +54,17 @@ export const loginUser = (email, password) => {
         password,
         returnSecureToken: true,
       };
-			const response = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`, authData);
-			const idToken = response.data.idToken;
+			const {data} = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`, authData);
+			const {idToken, expiresIn, refreshToken, localId} = data;
+			localStorage.setItem("idToken", idToken);
+			localStorage.setItem("refreshToken", refreshToken);
+			localStorage.setItem("expirationDate", (new Date().getTime() + parseInt(expiresIn)*MILLISECONDS_IN_SECOND));
+			localStorage.setItem("email", email);
+			localStorage.setItem("localId", localId);
 			await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${API_KEY}`, {idToken});
-			dispatch(loginSuccess(response.data));
+			dispatch(loginSuccess(data));
 		}catch(error){
-			error.message = error.response.data.error.message
+			error.message = error.response.data.error.message;
 			dispatch(loginFail(error));
 		}
 	}
@@ -89,3 +95,36 @@ export const logout = () => {
 		type: actionTypes.LOGOUT
 	};
 };
+
+export const autoLogin = () => {
+	return dispatch => {
+		console.log("Auto login");
+		const idToken = localStorage.getItem("idToken");
+		if(!idToken){
+			console.log("no idToken");
+			return dispatch(logout());
+		}
+		const refreshToken = localStorage.getItem("refreshToken");
+		const expirationDate = new Date(parseInt(localStorage.getItem("expirationDate")));
+		const email = localStorage.getItem("email");
+		const localId = localStorage.getItem("localId");
+		const currentTime = new Date();
+		console.log("current: " + currentTime);
+		console.log(expirationDate);
+		if(currentTime.getTime() < expirationDate.getTime()){
+			const expiresIn = (expirationDate.getTime() - currentTime.getTime()) / MILLISECONDS_IN_SECOND;
+			const data = {refreshToken, idToken, expiresIn, email, localId};
+			dispatch(loginSuccess(data));
+			return dispatch(setupAutoLogout(expiresIn));
+		}
+		return dispatch(logout());
+	};
+};
+
+const setupAutoLogout = timeout => {
+	return async dispatch => {
+		setTimeout(() => {
+			dispatch(logout());
+		}, timeout*MILLISECONDS_IN_SECOND)
+	}
+}
