@@ -21,15 +21,29 @@ const useStyles = makeStyles((theme) => ({
     background: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(${signup})`,
     backgroundPosition: "center",
     color: "white",
+    [theme.breakpoints.down('sm')]:{
+      height: "15em",
+    },
+    [theme.breakpoints.down('xs')]:{
+      height: "10em",
+    }
   },
   formContainer: {
     margin: "auto",
-    maxWidth: "30em",
+    width: "30em",
     padding: "3em 2em",
     marginTop: "2em",
+    [theme.breakpoints.down('xs')]:{
+      width: "100%",
+      padding: "1em"
+    }
   },
   formInput: {
     minWidth: "20em",
+    [theme.breakpoints.down('xs')]:{
+      width: "100%",
+      minWidth: "15em"
+    }
   },
   signupButton: {
     borderRadius: 30,
@@ -40,6 +54,22 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "1em",
     marginBottom: "1em",
   },
+  pageTitle:{
+    [theme.breakpoints.down('sm')]: {
+      fontSize: "4rem"
+    },
+    [theme.breakpoints.down('xs')]: {
+      fontSize: "3rem"
+    }
+  },
+  pageSubtitle:{
+    [theme.breakpoints.down('sm')]: {
+      fontSize: "2rem"
+    },
+    [theme.breakpoints.down('xs')]: {
+      fontSize: "1.25rem"
+    }
+  }
 }));
 
 const Signup = ({error, redirectPath, loading, handleRegister}) => {
@@ -134,8 +164,8 @@ const Signup = ({error, redirectPath, loading, handleRegister}) => {
         justify="center"
         alignItems="center"
       >
-        <Typography variant="h1">Sign Up Now!</Typography>
-        <Typography variant="h2">We can't wait to have You onboard</Typography>
+        <Typography variant="h1" className={classes.pageTitle}>Sign Up Now!</Typography>
+        <Typography variant="h2" className={classes.pageSubtitle}>We can't wait to have You onboard</Typography>
       </Grid>
       <Paper className={classes.formContainer} elevation={6}>
         <Grid

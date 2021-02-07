@@ -22,15 +22,29 @@ const useStyles = makeStyles((theme) => ({
     background: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(${login})`,
     backgroundPosition: "center",
     color: "white",
+    [theme.breakpoints.down('sm')]:{
+      height: "15em",
+    },
+    [theme.breakpoints.down('xs')]:{
+      height: "10em",
+    }
   },
   formContainer: {
     margin: "auto",
-    maxWidth: "30em",
+    width: "30em",
     padding: "3em 2em",
     marginTop: "2em",
+    [theme.breakpoints.down('xs')]:{
+      width: "100%",
+      padding: "1em"
+    }
   },
   formInput: {
     minWidth: "20em",
+    [theme.breakpoints.down('xs')]:{
+      width: "100%",
+      minWidth: "15em"
+    }
   },
   loginButton: {
     borderRadius: 30,
@@ -43,6 +57,22 @@ const useStyles = makeStyles((theme) => ({
   },
   snackBar:{
     backgroundColor: theme.palette.error.main
+  },
+  pageTitle:{
+    [theme.breakpoints.down('sm')]: {
+      fontSize: "4rem"
+    },
+    [theme.breakpoints.down('xs')]: {
+      fontSize: "3rem"
+    }
+  },
+  pageSubtitle:{
+    [theme.breakpoints.down('sm')]: {
+      fontSize: "2rem"
+    },
+    [theme.breakpoints.down('xs')]: {
+      fontSize: "1.25rem"
+    }
   }
 }));
 
@@ -76,8 +106,8 @@ const Login = ({redirectPath, loading, error, handleLogin, clearError, ...props}
         justify="center"
         alignItems="center"
       >
-        <Typography variant="h1">Jump Back In!</Typography>
-        <Typography variant="h2">It's great to see You again</Typography>
+        <Typography variant="h1" className={classes.pageTitle}>Jump Back In!</Typography>
+        <Typography variant="h2" className={classes.pageSubtitle}>It's great to see You again</Typography>
       </Grid>
       <Paper className={classes.formContainer} elevation={6}>
         <Grid
