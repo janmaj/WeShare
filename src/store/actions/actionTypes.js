@@ -7,6 +7,7 @@ export const LOGIN_SUCCESS = 'LOGIN_SUCESS';
 export const LOGIN_FAIL = 'LOGIN_FAIL';
 
 export const LOGOUT = 'LOGOUT'
+export const AUTH_REFRESH = 'AUTH_REFRESH';
 
 export const CLEAR_ERROR = 'CLEAR_ERROR';
 export const RESET_CLEAR_INPUT = 'RESET_CLEAR_INPUT';

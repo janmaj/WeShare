@@ -90,7 +90,6 @@ const fetchPostsFail = error => {
 export const updatePost = (id, post) => {
 	return async dispatch => {
 		try{
-			console.log({id});
 			await db.collection('posts').doc(id).set(post);
 			dispatch(updatePostSuccess(id, post));
 		}catch(error){

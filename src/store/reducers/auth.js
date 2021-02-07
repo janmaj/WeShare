@@ -58,6 +58,13 @@ const reducer = (state = defaultState, action) => {
 				localId: null,
 				displayName: null
 			}
+		case actionTypes.AUTH_REFRESH:
+			return {
+				...state,
+				idToken: action.idToken,
+				refreshToken: action.refreshToken,
+				expiresIn: action.expiresIn
+			};
 		case actionTypes.CLEAR_ERROR:
 			return {
 				...state,

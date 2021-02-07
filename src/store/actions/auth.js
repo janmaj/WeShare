@@ -98,10 +98,8 @@ export const logout = () => {
 
 export const autoLogin = () => {
 	return dispatch => {
-		console.log("Auto login");
 		const idToken = localStorage.getItem("idToken");
 		if(!idToken){
-			console.log("no idToken");
 			return dispatch(logout());
 		}
 		const refreshToken = localStorage.getItem("refreshToken");
@@ -109,22 +107,38 @@ export const autoLogin = () => {
 		const email = localStorage.getItem("email");
 		const localId = localStorage.getItem("localId");
 		const currentTime = new Date();
-		console.log("current: " + currentTime);
-		console.log(expirationDate);
 		if(currentTime.getTime() < expirationDate.getTime()){
 			const expiresIn = (expirationDate.getTime() - currentTime.getTime()) / MILLISECONDS_IN_SECOND;
 			const data = {refreshToken, idToken, expiresIn, email, localId};
 			dispatch(loginSuccess(data));
-			return dispatch(setupAutoLogout(expiresIn));
+			return dispatch(setupTokenRefresh(expiresIn));
 		}
 		return dispatch(logout());
 	};
 };
 
-const setupAutoLogout = timeout => {
+const setupTokenRefresh = (timeout) => {
 	return async dispatch => {
-		setTimeout(() => {
+		setTimeout(async () => {
+			const refreshToken = localStorage.getItem("refreshToken");
+			if(!refreshToken){
+				return dispatch(logout());
+			}
+			const {data} = await axios.post(`https://securetoken.googleapis.com/v1/token?key=${API_KEY}`, {'grant_type': 'refresh_token', 'refresh_token': refreshToken});
+			const expiresIn = data['expires_in'];
+			const idToken = data['id_token'];
+			const newRefreshToken = data['refresh_token'];
+			dispatch(authRefresh(idToken, newRefreshToken, expiresIn));
 			dispatch(logout());
 		}, timeout*MILLISECONDS_IN_SECOND)
-	}
-}
+	};
+};
+
+const authRefresh = (idToken, refreshToken, expiresIn) => {
+	return {
+		type: actionTypes.AUTH_REFRESH,
+		idToken, 
+		refreshToken,
+		expiresIn
+	};
+};
