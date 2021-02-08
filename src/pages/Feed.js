@@ -4,9 +4,13 @@ import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Snackbar from '@material-ui/core/Snackbar';
+import Fab from '@material-ui/core/Fab';
+import Hidden from '@material-ui/core/Hidden';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import {makeStyles} from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
+import {makeStyles, useTheme} from '@material-ui/core/styles';
 import {connect} from 'react-redux';
 import {useHistory} from 'react-router-dom';
 import {Redirect} from 'react-router-dom';
@@ -17,16 +21,36 @@ import * as actions from '../store/actions';
 
 const useStyles = makeStyles(theme => ({
 	feedTitle: {
-		color: theme.palette.common.darkBlue
+		color: theme.palette.common.darkBlue,
+		[theme.breakpoints.down('sm')]:{
+			lineHeight: "100%"
+		}
 	},
 	snackBar:{
     backgroundColor: theme.palette.error.main
-  }
+  },
+	fab: {
+		position: "fixed",
+		bottom: theme.spacing(4),
+		right: theme.spacing(4),
+		width: 80,
+		height: 80,
+		opacity: 0,
+		[theme.breakpoints.down('xs')]: {
+			opacity: 1
+		}
+	},
+	fabIcon: {
+		fontSize: "3rem"
+	}
 }));
 
 const Feed = ({logout, isAuth, error, clearError, posts, loadingFeed, fetchPosts, ...props})=>{
 	const classes = useStyles();
 	const history = useHistory();
+	const theme = useTheme();
+	const matchesSM = useMediaQuery(theme.breakpoints.down('sm'));
+	const matchesXS = useMediaQuery(theme.breakpoints.down('xs'));
 	const [snackbarOpen, setSnackbarOpen] = useState(false);
 
 	useEffect(()=>{
@@ -50,25 +74,30 @@ const Feed = ({logout, isAuth, error, clearError, posts, loadingFeed, fetchPosts
 			{!isAuth && <Redirect to="/login"/>}
 			<Navbar authenticated activeTab={0} handleLogout={handleLogout}/>
 			<Container>
-				<Grid container spacing={4}>
-					<Grid item lg={12}>
-						<Typography variant="h1" className={classes.feedTitle}>
+				<Grid container spacing={3}>
+					<Grid item xs={12}>
+						<Typography variant="h1" className={classes.feedTitle} align={matchesSM ? "center" : "right"}>
 							Your Feed
 						</Typography>
 					</Grid>
-					<Grid item container lg={7} direction="column">
+					<Hidden xsDown>
+						<Grid item md={5} sm={12}>
+							<NewPost style={{position: matchesSM ? undefined : "fixed"}} onSubmit={post => props.submitPost(post)} loading={props.loadingSubmit}/>
+						</Grid>
+					</Hidden>
+					<Grid item container md={7} sm={12}direction="column">
 						<Grid item>
 							{loadingFeed ? <CircularProgress /> : <PostList posts={posts}/>}
 						</Grid>
-					</Grid>
-					<Grid item lg={5}>
-						<NewPost style={{position: "fixed"}} onSubmit={post => props.submitPost(post)} loading={props.loadingSubmit}/>
 					</Grid>
 				</Grid>
 			</Container>
 			<Snackbar classes={{root: classes.snackBar}} open={snackbarOpen} onClose={() => setSnackbarOpen(false)}>
         <SnackbarContent message={"Something went wrong. Try again later"} classes={{root: classes.snackBar}}/>
       </Snackbar>
+			<Fab color="secondary" className={classes.fab}>
+				<AddIcon className={classes.fabIcon}/>
+			</Fab>
 		</React.Fragment>
 	);
 };
