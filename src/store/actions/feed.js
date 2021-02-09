@@ -19,6 +19,7 @@ export const addPost = post => {
 			post.id = docRef.id;
 			dispatch(addPostSuccess(post));
 		}catch(error){
+			console.log(error);
 			dispatch(addPostFail(error));
 		}
 	}

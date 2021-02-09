@@ -17,6 +17,7 @@ import {Redirect} from 'react-router-dom';
 
 import PostList from '../components/PostList';
 import NewPost from '../components/NewPost';
+import NewPostDialog from '../components/NewPostDialog';
 import * as actions from '../store/actions';
 
 const useStyles = makeStyles(theme => ({
@@ -36,8 +37,10 @@ const useStyles = makeStyles(theme => ({
 		width: 80,
 		height: 80,
 		opacity: 0,
+		pointerEvents: "none",
 		[theme.breakpoints.down('xs')]: {
-			opacity: 1
+			opacity: 1,
+			pointerEvents: "all"
 		}
 	},
 	fabIcon: {
@@ -50,8 +53,8 @@ const Feed = ({logout, isAuth, error, clearError, posts, loadingFeed, fetchPosts
 	const history = useHistory();
 	const theme = useTheme();
 	const matchesSM = useMediaQuery(theme.breakpoints.down('sm'));
-	const matchesXS = useMediaQuery(theme.breakpoints.down('xs'));
 	const [snackbarOpen, setSnackbarOpen] = useState(false);
+	const [dialogOpen, setDialogOpen] = useState(false);
 
 	useEffect(()=>{
 		fetchPosts();
@@ -95,9 +98,10 @@ const Feed = ({logout, isAuth, error, clearError, posts, loadingFeed, fetchPosts
 			<Snackbar classes={{root: classes.snackBar}} open={snackbarOpen} onClose={() => setSnackbarOpen(false)}>
         <SnackbarContent message={"Something went wrong. Try again later"} classes={{root: classes.snackBar}}/>
       </Snackbar>
-			<Fab color="secondary" className={classes.fab}>
+			<Fab color="secondary" className={classes.fab} onClick={() => setDialogOpen(true)}>
 				<AddIcon className={classes.fabIcon}/>
 			</Fab>
+			<NewPostDialog open={dialogOpen} onClose={() => setDialogOpen(false)} onSubmit={post => props.submitPost(post)} loading={props.loadingSubmit}/>
 		</React.Fragment>
 	);
 };

@@ -55,13 +55,14 @@ export const loginUser = (email, password) => {
         returnSecureToken: true,
       };
 			const {data} = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`, authData);
-			const {idToken, expiresIn, refreshToken, localId} = data;
+			const {idToken, expiresIn, refreshToken, localId, displayName} = data;
 			localStorage.setItem("idToken", idToken);
 			localStorage.setItem("refreshToken", refreshToken);
 			localStorage.setItem("expirationDate", (new Date().getTime() + parseInt(expiresIn)*MILLISECONDS_IN_SECOND));
 			localStorage.setItem("email", email);
 			localStorage.setItem("localId", localId);
-			await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${API_KEY}`, {idToken});
+			localStorage.setItem("displayName", displayName);
+			//await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${API_KEY}`, {idToken}); <- This possibly could be deleted
 			dispatch(loginSuccess(data));
 		}catch(error){
 			error.message = error.response.data.error.message;
@@ -106,10 +107,11 @@ export const autoLogin = () => {
 		const expirationDate = new Date(parseInt(localStorage.getItem("expirationDate")));
 		const email = localStorage.getItem("email");
 		const localId = localStorage.getItem("localId");
+		const displayName = localStorage.getItem("displayName");
 		const currentTime = new Date();
 		if(currentTime.getTime() < expirationDate.getTime()){
 			const expiresIn = (expirationDate.getTime() - currentTime.getTime()) / MILLISECONDS_IN_SECOND;
-			const data = {refreshToken, idToken, expiresIn, email, localId};
+			const data = {refreshToken, idToken, expiresIn, email, localId, displayName};
 			dispatch(loginSuccess(data));
 			return dispatch(setupTokenRefresh(expiresIn));
 		}
