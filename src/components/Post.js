@@ -42,7 +42,7 @@ const Post = ({id, author, createdAt, content, likes, comments, updatePost, user
 	
 	const handleLike = () => {
 		console.log('post liked');
-		const updatedPost = {author, content, createdAt, comments};
+		const updatedPost = {author, content, createdAt, comments, id};
 		let updatedLikes;
 		if(likes.includes(username)){
 			updatedLikes = likes.filter(like => like !== username);

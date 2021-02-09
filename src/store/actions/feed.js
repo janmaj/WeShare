@@ -91,9 +91,13 @@ const fetchPostsFail = error => {
 export const updatePost = (id, post) => {
 	return async dispatch => {
 		try{
-			await db.collection('posts').doc(id).set(post);
-			dispatch(updatePostSuccess(id, post));
+			const batch = db.batch();
+			const postRef = db.collection("posts").doc(id);
+			batch.update(postRef, post);
+			await batch.commit();
+			dispatch(updatePostSuccess(id, post))
 		}catch(error){
+			console.log(error);
 			dispatch(updatePostFail(error));
 		}
 	}
