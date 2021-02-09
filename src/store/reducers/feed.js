@@ -2,6 +2,7 @@ import * as actionTypes from '../actions/actionTypes';
 
 const defaultState = {
 	posts: [],
+	expandedPost: null,
 	loadingSubmit: false,
 	loadingFeed: false,
 	error: null,
@@ -71,6 +72,12 @@ const reducer = (state = defaultState, action) => {
 				...state,
 				error: null
 			};
+		case actionTypes.EXPAND_POST: {
+			return {
+				...state,
+				expandedPost: action.id === state.expandedPost ? null : action.id // Shrinks post if it's already expanded
+			}
+		}
 		default: return state;
 	}
 };

@@ -48,7 +48,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-const Feed = ({logout, isAuth, error, clearError, posts, loadingFeed, fetchPosts, ...props})=>{
+const Feed = ({logout, isAuth, error, clearError, posts, loadingFeed, fetchPosts, expandedPost, onExpandPost, ...props})=>{
 	const classes = useStyles();
 	const history = useHistory();
 	const theme = useTheme();
@@ -90,7 +90,7 @@ const Feed = ({logout, isAuth, error, clearError, posts, loadingFeed, fetchPosts
 					</Hidden>
 					<Grid item container md={7} sm={12}direction="column">
 						<Grid item>
-							{loadingFeed ? <CircularProgress /> : <PostList posts={posts}/>}
+							{loadingFeed ? <CircularProgress /> : <PostList posts={posts} expanded={expandedPost} onExpand={onExpandPost}/>}
 						</Grid>
 					</Grid>
 				</Grid>
@@ -112,7 +112,8 @@ const mapStateToProps = state => {
 		error: state.feed.error,
 		loadingSubmit: state.feed.loadingSubmit,
 		posts: state.feed.posts,
-		loadingFeed: state.feed.loadingFeed
+		loadingFeed: state.feed.loadingFeed,
+		expandedPost: state.feed.expandedPost
 	};
 };
 
@@ -121,7 +122,8 @@ const mapDispatchToProps = dispatch => {
 		logout: () => dispatch(actions.logout()),
 		submitPost: post => dispatch(actions.addPost(post)),
 		clearError: () => dispatch(actions.clearError()),
-		fetchPosts: () => dispatch(actions.fetchPosts())
+		fetchPosts: () => dispatch(actions.fetchPosts()),
+		onExpandPost: id => dispatch(actions.expandPost(id))
 	};
 };
 

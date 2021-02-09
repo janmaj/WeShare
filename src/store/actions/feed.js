@@ -117,3 +117,10 @@ const updatePostFail = (error) => {
 		error
 	};
 };
+
+export const expandPost = id => {
+	return {
+		type: actionTypes.EXPAND_POST,
+		id
+	};
+};
