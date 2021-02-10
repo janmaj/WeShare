@@ -206,6 +206,7 @@ const Signup = ({error, redirectPath, loading, handleRegister}) => {
               id="password"
               label="password"
               value={password}
+              type="password"
               onChange={e => setPassword(e.target.value)}
               helperText={passwordHelper}
               error={passwordHelper!==''}
@@ -218,6 +219,7 @@ const Signup = ({error, redirectPath, loading, handleRegister}) => {
               id="password-repeat"
               label="repeat password"
               value={repPassword}
+              type="password"
               onChange={e => setRepPassword(e.target.value)}
               helperText={repPasswordHelper}
               error={repPasswordHelper!==''}

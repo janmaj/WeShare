@@ -45,7 +45,7 @@ const useStyles = makeStyles(theme => ({
 	},
 	fabIcon: {
 		fontSize: "3rem"
-	}
+	},
 }));
 
 const Feed = ({logout, isAuth, error, clearError, posts, loadingFeed, fetchPosts, expandedPost, onExpandPost, ...props})=>{
@@ -89,8 +89,8 @@ const Feed = ({logout, isAuth, error, clearError, posts, loadingFeed, fetchPosts
 						</Grid>
 					</Hidden>
 					<Grid item container md={7} sm={12}direction="column">
-						<Grid item>
-							{loadingFeed ? <CircularProgress /> : <PostList posts={posts} expanded={expandedPost} onExpand={onExpandPost}/>}
+						<Grid item container justify="center">
+							{loadingFeed ? <CircularProgress size={100} style={{margin: "auto"}}/> : <PostList posts={posts} expanded={expandedPost} onExpand={onExpandPost}/>}
 						</Grid>
 					</Grid>
 				</Grid>

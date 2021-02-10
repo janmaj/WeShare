@@ -14,6 +14,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import MessageIcon from '@material-ui/icons/Message';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import IconButton from '@material-ui/core/IconButton';
+import Hidden from '@material-ui/core/Hidden';
 import {connect} from 'react-redux';
 import {v4 as uuidv4} from 'uuid';
 
@@ -155,13 +156,13 @@ const Post = ({id, author, createdAt, content, likes, comments, updatePost, user
 					{likes.includes(localId) ? <FavoriteIcon className={classes.heartIcon}/> : <FavoriteBorderIcon className={classes.heartIcon}/>}
 				</IconButton>
 				<Typography variant="subtitle1" onClick={handleLike}>
-					{likes.length} {likes.length === 1 ? "like" : "likes"}
+					{likes.length} <Hidden xsDown>{likes.length === 1 ? "like" : "likes"}</Hidden>
 				</Typography>
 				<IconButton edge="end" onClick={() => onExpand(id)}>
 					<MessageIcon className={classes.commentIcon}/>
 				</IconButton>
 				<Typography variant="subtitle1">
-					{comments.length} {comments.length === 1 ? "comment" : "comments"}
+					{comments.length} <Hidden xsDown>{comments.length === 1 ? "comment" : "comments"}</Hidden>
 				</Typography>
 				{author.id === localId && trashIcon}
 			</CardActions>

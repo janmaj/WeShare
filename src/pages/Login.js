@@ -133,6 +133,7 @@ const Login = ({redirectPath, loading, error, handleLogin, clearError, ...props}
               variant="filled"
               id="password"
               label="password"
+              type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
             />
