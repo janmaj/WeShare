@@ -53,7 +53,7 @@ const NewPostDialog = props =>{
 	
 	return (
     <Dialog open={props.open} onClose={props.onClose} PaperProps={{classes: {root: classes.dialog}}}>
-      <DialogTitle>
+      <DialogTitle disableTypography>
         <Typography variant="h2" align="center">Create a new post</Typography>
       </DialogTitle>
       <DialogContent>

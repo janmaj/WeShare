@@ -48,7 +48,10 @@ const useStyles = makeStyles(theme => ({
 	submitButton: {
 		margin: "auto",
 		borderRadius: 30,
-    width: 100
+    width: 100,
+		[theme.breakpoints.down('md')]:{
+			width: "100%"
+		}
 	}
 }));
 
@@ -95,7 +98,7 @@ const Post = ({id, author, createdAt, content, likes, comments, updatePost, user
 	const commentInputField = (
 		<CardActions>
 			<Grid container alignItems="center" spacing={2}>
-				<Grid item md={10}>
+				<Grid item xs={9} sm={10}>
 					<TextField 
 					variant="filled" 
 					fullWidth 
@@ -105,8 +108,10 @@ const Post = ({id, author, createdAt, content, likes, comments, updatePost, user
 					value={commentContents} 
 					onChange={e => setCommentContents(e.target.value)}/>
 				</Grid>
-				<Grid item md={2}>
-					<Button variant="contained" color="secondary" className={classes.submitButton} disabled={commentContents.length === 0} onClick={handleComment}>Submit</Button>
+				<Grid item xs={3} sm={2} container justify="center">
+					<Grid item>
+						<Button variant="contained" color="secondary" className={classes.submitButton} disabled={commentContents.length === 0} onClick={handleComment}>Submit</Button>
+					</Grid>
 				</Grid>
 			</Grid>
 		</CardActions>
