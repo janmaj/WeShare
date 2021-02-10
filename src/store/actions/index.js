@@ -2,7 +2,8 @@ export {
 	registerUser,
 	loginUser,
 	logout,
-	autoLogin
+	autoLogin,
+	clearAuthRedirect
 } from './auth';
 
 export {

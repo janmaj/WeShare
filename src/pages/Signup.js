@@ -4,9 +4,11 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
+import Snackbar from '@material-ui/core/Snackbar';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
 import Button from "@material-ui/core/Button";
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Link, Redirect } from "react-router-dom";
+import { Link, useHistory} from "react-router-dom";
 import emailValidator from 'email-validator';
 import {connect} from 'react-redux';
 
@@ -72,8 +74,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Signup = ({error, redirectPath, loading, handleRegister}) => {
+const Signup = ({error, redirectPath, loading, handleRegister, clearRedirectPath, clearError, ...props}) => {
   const classes = useStyles();
+  const history = useHistory();
+
   const [email, setEmail] = useState('');
   const [emailHelper, setEmailHelper] = useState('');
   
@@ -85,6 +89,30 @@ const Signup = ({error, redirectPath, loading, handleRegister}) => {
   
   const [repPassword, setRepPassword] = useState('');
   const [repPasswordHelper, setRepPasswordHelper] = useState('');
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+
+  useEffect(() => {
+    if(error){
+      if(error.message === 'USERNAME_TAKEN'){
+        setSnackbarMessage('This username is already in use');
+      }else if(error.message === 'EMAIL_EXISTS'){
+        setSnackbarMessage('This email is already in use');
+      }else{
+        setSnackbarMessage('Something went wrong. Try again later');
+      }
+      setSnackbarOpen(true);
+      clearError();
+    }
+  }, [error, setSnackbarOpen, setSnackbarMessage, clearError]);
+
+  useEffect(() => {
+    if(redirectPath){
+      clearRedirectPath();
+      history.push(redirectPath);
+    }
+  }, [history, clearRedirectPath, redirectPath]);
 
   const validateEmail = useCallback(() => {
     if(email.length > 0){
@@ -155,7 +183,6 @@ const Signup = ({error, redirectPath, loading, handleRegister}) => {
 
   return (
     <React.Fragment>
-      {redirectPath && <Redirect to={redirectPath} />}
       <Navbar activeTab={0} />
       <Grid
         container
@@ -242,6 +269,9 @@ const Signup = ({error, redirectPath, loading, handleRegister}) => {
           </Grid>
         </Grid>
       </Paper>
+      <Snackbar classes={{root: classes.snackBar}} open={snackbarOpen} onClose={() => setSnackbarOpen(false)}>
+        <SnackbarContent message={snackbarMessage} classes={{root: classes.snackBar}}/>
+      </Snackbar>
     </React.Fragment>
   );
 };
@@ -256,7 +286,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    handleRegister: (email, password, username) => dispatch(actions.registerUser(email, password, username))
+    handleRegister: (email, password, username) => dispatch(actions.registerUser(email, password, username)),
+    clearRedirectPath: () => dispatch(actions.clearAuthRedirect()),
+    clearError: () => dispatch(actions.clearError())
   };
 };
 

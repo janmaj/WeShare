@@ -6,7 +6,7 @@ import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Link, Redirect } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import {connect} from 'react-redux';
@@ -76,8 +76,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Login = ({redirectPath, loading, error, handleLogin, clearError, ...props}) => {
+const Login = ({redirectPath, loading, error, handleLogin, clearError, clearRedirectPath, ...props}) => {
   const classes = useStyles();
+  const history = useHistory();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -95,9 +96,15 @@ const Login = ({redirectPath, loading, error, handleLogin, clearError, ...props}
     }
   }, [error, setSnackbarOpen, setSnackbarMessage, clearError]);
 
+  useEffect(() => {
+    if(redirectPath){
+      clearRedirectPath();
+      history.push(redirectPath);
+    }
+  }, [history, clearRedirectPath, redirectPath]);
+
   return (
     <React.Fragment>
-      {redirectPath && <Redirect to={redirectPath} />}
       <Navbar activeTab={1} />
       <Grid
         container
@@ -173,7 +180,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     handleLogin: (email, password) => dispatch(actions.loginUser(email, password)),
-    clearError: () => dispatch(actions.clearError())
+    clearError: () => dispatch(actions.clearError()),
+    clearRedirectPath: () => dispatch(actions.clearAuthRedirect())
   };
 };
 

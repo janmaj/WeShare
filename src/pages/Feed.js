@@ -24,7 +24,8 @@ const useStyles = makeStyles(theme => ({
 	feedTitle: {
 		color: theme.palette.common.darkBlue,
 		[theme.breakpoints.down('sm')]:{
-			lineHeight: "100%"
+			lineHeight: "100%",
+			fontSize: "4rem"
 		}
 	},
 	snackBar:{

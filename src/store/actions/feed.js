@@ -1,15 +1,6 @@
-import firebase from 'firebase';
-import 'firebase/firestore';
+import db from '../db';
 
 import * as actionTypes from './actionTypes';
-
-firebase.initializeApp({
-	apiKey: "AIzaSyB3b_Y9pmVLPn2KyiAxQ7NitJ2obeYRSm0",
-	authDomain: "weshare-8c49d.firebaseapp.com",
-	projectId: "weshare-8c49d"
-});
-
-const db = firebase.firestore();
 
 export const addPost = post => {
 	return async dispatch => {

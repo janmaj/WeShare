@@ -70,6 +70,11 @@ const reducer = (state = defaultState, action) => {
 				...state,
 				error: null
 			}
+		case actionTypes.CLEAR_AUTH_REDIRECT:
+			return {
+				...state,
+				redirectPath: null
+			}
 		default: return state
 	}
 };

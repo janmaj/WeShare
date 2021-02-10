@@ -1,4 +1,6 @@
 import axios from 'axios';
+
+import db from '../db';
 import * as actionTypes from './actionTypes';
 
 const API_KEY = 'AIzaSyB3b_Y9pmVLPn2KyiAxQ7NitJ2obeYRSm0';
@@ -8,6 +10,11 @@ export const registerUser = (email, password, username) => {
 	return async dispatch => {
 		dispatch(registerStart());
 		try{
+			const takenUsernames = await db.collection('usernames').where('name', '==', username).get();
+			console.log(takenUsernames);
+			if(takenUsernames.docs.length > 1){
+				throw new Error('USERNAME_TAKEN');
+			}
 			const authData = {
         email,
         password,
@@ -17,9 +24,13 @@ export const registerUser = (email, password, username) => {
 			authData.idToken = response.data.idToken;
 			authData.displayName = username;
 			await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:update?key=${API_KEY}`, authData);
+			await db.collection("usernames").add({name: username});
 			dispatch(resgisterSuccess(response.data));
 		}catch(error){
-			console.log(error)
+			if(error.response && error.response.data.error.errors[0].message === 'EMAIL_EXISTS'){
+				error.message = 'EMAIL_EXISTS';
+			}
+			console.log(error.response)
 			dispatch(registerFail(error));
 		}
 	}
@@ -62,7 +73,6 @@ export const loginUser = (email, password) => {
 			localStorage.setItem("email", email);
 			localStorage.setItem("localId", localId);
 			localStorage.setItem("displayName", displayName);
-			//await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${API_KEY}`, {idToken}); <- This possibly could be deleted
 			dispatch(loginSuccess(data));
 		}catch(error){
 			error.message = error.response.data.error.message;
@@ -142,5 +152,11 @@ const authRefresh = (idToken, refreshToken, expiresIn) => {
 		idToken, 
 		refreshToken,
 		expiresIn
+	};
+};
+
+export const clearAuthRedirect = () => {
+	return {
+		type: actionTypes.CLEAR_AUTH_REDIRECT
 	};
 };

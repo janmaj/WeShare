@@ -17,10 +17,20 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('md')]:{
       width: "unset"
     },
+    marginTop: "-2em",
+    [theme.breakpoints.down('sm')]:{
+      marginTop: "0"
+    }
   },
   newPostPaper: {
     padding: theme.spacing(3),
 	},
+  newPostHeader:{
+    lineHeight: "100%",
+    [theme.breakpoints.down('sm')]:{
+      fontSize: "2.5rem"
+    }
+  },
 	inputField:{
     [theme.breakpoints.up('lg')]:{
       width: "31em"
@@ -65,10 +75,11 @@ const NewPost = ({onSubmit, loading, userName, localId, clearInput, resetClearIn
       container
       direction="column"
       className={classes.newPostContainer}
+      spacing={2}
       {...props}
     >
       <Grid item>
-        <Typography variant="h2" align={matchesSM ? "center" : undefined}>Create a new post</Typography>
+        <Typography variant="h2" align={matchesSM ? "center" : undefined} className={classes.newPostHeader}>Create a new post</Typography>
       </Grid>
       <Grid item>
         <Paper elevation={8} className={classes.newPostPaper}>
