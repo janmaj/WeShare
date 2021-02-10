@@ -10,7 +10,8 @@ export {
 	resetClearInput,
 	fetchPosts,
 	updatePost,
-	expandPost
+	expandPost,
+	deletePost
 }from './feed.js';
 
 export{

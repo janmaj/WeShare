@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-const NewPost = ({onSubmit, loading, userName, clearInput, resetClearInput, ...props}) => {
+const NewPost = ({onSubmit, loading, userName, localId, clearInput, resetClearInput, ...props}) => {
   const classes = useStyles();
   const [postContents, setPostContents] = useState("");
   const theme = useTheme();
@@ -52,7 +52,7 @@ const NewPost = ({onSubmit, loading, userName, clearInput, resetClearInput, ...p
   const handleSubmit = () => {
     const post = {
       content: postContents,
-      author: userName,
+      author: {name: userName, id: localId},
       createdAt: new Date(),
       likes: [],
       comments: []
@@ -107,6 +107,7 @@ const NewPost = ({onSubmit, loading, userName, clearInput, resetClearInput, ...p
 const mapStateToProps = state => {
   return {
     userName: state.auth.displayName,
+    localId: state.auth.localId,
     clearInput: state.feed.clearInput
   };
 };

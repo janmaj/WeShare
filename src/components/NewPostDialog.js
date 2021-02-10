@@ -43,7 +43,7 @@ const NewPostDialog = props =>{
 	const handleSubmit = () => {
     const post = {
       content: postContents,
-      author: props.userName,
+      author: {name: props.userName, id: props.localId},
       createdAt: new Date(),
       likes: [],
       comments: []
@@ -91,6 +91,7 @@ const NewPostDialog = props =>{
 const mapStateToProps = state => {
   return {
     userName: state.auth.displayName,
+    localId: state.auth.localId,
     clearInput: state.feed.clearInput
   };
 };

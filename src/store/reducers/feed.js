@@ -10,6 +10,7 @@ const defaultState = {
 };
 
 const reducer = (state = defaultState, action) => {
+	let newPosts;
 	switch(action.type){
 		case actionTypes.ADD_POST_START: 
 			return{
@@ -48,7 +49,7 @@ const reducer = (state = defaultState, action) => {
 				error: action.error
 			};
 		case actionTypes.UPDATE_POST_SUCCESS:
-			const newPosts = state.posts.map(post => {
+			newPosts = state.posts.map(post => {
 				if(post.id === action.id){
 					return action.post
 				}
@@ -59,6 +60,17 @@ const reducer = (state = defaultState, action) => {
 				posts: newPosts
 			}
 		case actionTypes.UPDATE_POST_FAIL:
+			return {
+				...state,
+				error: action.error
+			}
+		case actionTypes.DELETE_POST_SUCCESS:
+			newPosts = state.posts.filter(({id})=> id !== action.id);
+			return {
+				...state,
+				posts: newPosts
+			}
+		case actionTypes.DELETE_POST_FAIL:
 			return {
 				...state,
 				error: action.error

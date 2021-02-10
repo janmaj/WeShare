@@ -85,7 +85,7 @@ const Feed = ({logout, isAuth, error, clearError, posts, loadingFeed, fetchPosts
 					</Grid>
 					<Hidden xsDown>
 						<Grid item md={5} sm={12}>
-							<NewPost style={{position: matchesSM ? undefined : "sticky", top: 80}} onSubmit={post => props.submitPost(post)} loading={props.loadingSubmit}/>
+							<NewPost style={{position: matchesSM ? undefined : "sticky", top: 90}} onSubmit={post => props.submitPost(post)} loading={props.loadingSubmit}/>
 						</Grid>
 					</Hidden>
 					<Grid item container md={7} sm={12}direction="column">

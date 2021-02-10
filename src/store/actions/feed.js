@@ -118,6 +118,35 @@ const updatePostFail = (error) => {
 	};
 };
 
+export const deletePost = id => {
+	return async dispatch => {
+		try{
+			const batch = db.batch();
+			const postRef = db.collection("posts").doc(id);
+			batch.delete(postRef);
+			await batch.commit();
+			dispatch(deletePostSuccess(id))
+		}catch(error){
+			console.log(error);
+			dispatch(deletePostFail(error));
+		}
+	}
+};
+
+const deletePostSuccess  = id => {
+	return {
+		type: actionTypes.DELETE_POST_SUCCESS,
+		id
+	};
+};
+
+const deletePostFail = (error) => {
+	return {
+		type: actionTypes.DELETE_POST_FAIL,
+		error
+	};
+};
+
 export const expandPost = id => {
 	return {
 		type: actionTypes.EXPAND_POST,

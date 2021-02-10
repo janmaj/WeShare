@@ -11,7 +11,7 @@ const Comment = ({contents, author, createdAt})=>{
 			<Grid container spacing={1}>
 				<Grid item>
 					<Typography variant="subtitle2">
-						{author}
+						{author.name}
 					</Typography>
 					<Typography variant="caption">
 						{calculatePostAge(createdAt)}

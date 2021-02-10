@@ -4,6 +4,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
@@ -11,6 +12,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import MessageIcon from '@material-ui/icons/Message';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import IconButton from '@material-ui/core/IconButton';
 import {connect} from 'react-redux';
 import {v4 as uuidv4} from 'uuid';
@@ -39,6 +41,9 @@ const useStyles = makeStyles(theme => ({
 	commentIcon: {
 		color: theme.palette.common.blue
 	},
+	trashIcon: {
+		color: theme.palette.common.crimson
+	},
 	commentsList: {
 		maxHeight: "15em",
 		overflow: "auto",
@@ -55,7 +60,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-const Post = ({id, author, createdAt, content, likes, comments, updatePost, username, expanded, onExpand, ...props})=>{
+const Post = ({id, author, createdAt, content, likes, comments, updatePost, username, expanded, onExpand, localId, deletePost, ...props})=>{
 	const classes = useStyles();
 	const [commentContents, setCommentContents] = useState('');
 	
@@ -63,10 +68,10 @@ const Post = ({id, author, createdAt, content, likes, comments, updatePost, user
 		console.log('post liked');
 		const updatedPost = {author, content, createdAt, comments, id};
 		let updatedLikes;
-		if(likes.includes(username)){
-			updatedLikes = likes.filter(like => like !== username);
+		if(likes.includes(localId)){
+			updatedLikes = likes.filter(like => like !== localId);
 		}else{
-			updatedLikes = [...likes, username];
+			updatedLikes = [...likes, localId];
 		}
 		updatedPost.likes = updatedLikes;
 		updatePost(id, updatedPost);
@@ -77,11 +82,19 @@ const Post = ({id, author, createdAt, content, likes, comments, updatePost, user
 		const seconds = Math.round(milliseconds/1000);
 		const nanoseconds = (milliseconds%1000) * 1000;
 		const createdAt = {seconds, nanoseconds};
-		const comment = {contents: commentContents, author: username, createdAt};
+		const comment = {contents: commentContents, author: {name: username, id:localId}, createdAt};
 		const newComments = [...comments, comment];
 		const updatedPost = {author, content, createdAt, comments: newComments, id, likes};
 		updatePost(id, updatedPost);
-	}
+	};
+
+	const trashIcon = (
+		<Box style={{marginLeft: "auto"}}>
+			<IconButton onClick={() => deletePost(id)}>
+				<DeleteForeverIcon className={classes.trashIcon}/>
+			</IconButton>
+		</Box>
+	);
 
 	const commentSection = comments.length > 0 &&(
 		<CardContent className={classes.commentsList}>
@@ -126,7 +139,7 @@ const Post = ({id, author, createdAt, content, likes, comments, updatePost, user
 					</Grid>
 					<Grid item>
 						<Typography variant="subtitle1" className={classes.authorName}>
-							{author}
+							{author.name}
 						</Typography>
 						<Typography variant="caption">
 							{calculatePostAge(createdAt)}
@@ -139,7 +152,7 @@ const Post = ({id, author, createdAt, content, likes, comments, updatePost, user
 			</CardContent>
 			<CardActions>
 				<IconButton edge="end" onClick={handleLike}>
-					{likes.includes(username) ? <FavoriteIcon className={classes.heartIcon}/> : <FavoriteBorderIcon className={classes.heartIcon}/>}
+					{likes.includes(localId) ? <FavoriteIcon className={classes.heartIcon}/> : <FavoriteBorderIcon className={classes.heartIcon}/>}
 				</IconButton>
 				<Typography variant="subtitle1" onClick={handleLike}>
 					{likes.length} {likes.length === 1 ? "like" : "likes"}
@@ -150,6 +163,7 @@ const Post = ({id, author, createdAt, content, likes, comments, updatePost, user
 				<Typography variant="subtitle1">
 					{comments.length} {comments.length === 1 ? "comment" : "comments"}
 				</Typography>
+				{author.id === localId && trashIcon}
 			</CardActions>
 			{expanded && commentSection}
 			{expanded && commentInputField}
@@ -159,13 +173,15 @@ const Post = ({id, author, createdAt, content, likes, comments, updatePost, user
 
 const mapStateToProps = state => {
 	return {
-		username: state.auth.displayName
+		username: state.auth.displayName,
+		localId: state.auth.localId
 	};
 };
 
 const mapDispatchToProps = dispatch => {
 	return {
-		updatePost: (id, postData) => dispatch(actions.updatePost(id, postData))
+		updatePost: (id, postData) => dispatch(actions.updatePost(id, postData)),
+		deletePost: id => dispatch(actions.deletePost(id)),
 	};
 };
 
