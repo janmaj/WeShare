@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
@@ -13,6 +13,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import MessageIcon from '@material-ui/icons/Message';
 import IconButton from '@material-ui/core/IconButton';
 import {connect} from 'react-redux';
+import {v4 as uuidv4} from 'uuid';
 
 import {calculatePostAge} from '../utils';
 import * as actions from '../store/actions';
@@ -53,6 +54,7 @@ const useStyles = makeStyles(theme => ({
 
 const Post = ({id, author, createdAt, content, likes, comments, updatePost, username, expanded, onExpand, ...props})=>{
 	const classes = useStyles();
+	const [commentContents, setCommentContents] = useState('');
 	
 	const handleLike = () => {
 		console.log('post liked');
@@ -65,20 +67,27 @@ const Post = ({id, author, createdAt, content, likes, comments, updatePost, user
 		}
 		updatedPost.likes = updatedLikes;
 		updatePost(id, updatedPost);
+	};
+
+	const handleComment = () => {
+		const milliseconds = new Date().getTime();
+		const seconds = Math.round(milliseconds/1000);
+		const nanoseconds = (milliseconds%1000) * 1000;
+		const createdAt = {seconds, nanoseconds};
+		const comment = {contents: commentContents, author: username, createdAt};
+		const newComments = [...comments, comment];
+		const updatedPost = {author, content, createdAt, comments: newComments, id, likes};
+		updatePost(id, updatedPost);
 	}
 
-	const commentSection = (
+	const commentSection = comments.length > 0 &&(
 		<CardContent className={classes.commentsList}>
 			<Grid container direction="column" spacing={2} >
-				<Grid item lg={12}>
-					<Comment />
-				</Grid>
-				<Grid item lg={12}>
-					<Comment />
-				</Grid>
-				<Grid item lg={12}>
-					<Comment />
-				</Grid>
+				{comments.map(({author, contents, createdAT})=>(
+					<Grid item key={uuidv4()}>
+						<Comment author={author} contents={contents} createdAt={createdAt}/>
+					</Grid>
+				))}
 			</Grid>
 		</CardContent>
 	);
@@ -87,10 +96,17 @@ const Post = ({id, author, createdAt, content, likes, comments, updatePost, user
 		<CardActions>
 			<Grid container alignItems="center" spacing={2}>
 				<Grid item md={10}>
-					<TextField variant="filled" fullWidth size="small"/>
+					<TextField 
+					variant="filled" 
+					fullWidth 
+					size="small" 
+					placeholder="Your comment goes here" 
+					multiline rowsMax={3} 
+					value={commentContents} 
+					onChange={e => setCommentContents(e.target.value)}/>
 				</Grid>
 				<Grid item md={2}>
-					<Button variant="contained" color="secondary" className={classes.submitButton}>Submit</Button>
+					<Button variant="contained" color="secondary" className={classes.submitButton} disabled={commentContents.length === 0} onClick={handleComment}>Submit</Button>
 				</Grid>
 			</Grid>
 		</CardActions>
@@ -120,14 +136,14 @@ const Post = ({id, author, createdAt, content, likes, comments, updatePost, user
 				<IconButton edge="end" onClick={handleLike}>
 					{likes.includes(username) ? <FavoriteIcon className={classes.heartIcon}/> : <FavoriteBorderIcon className={classes.heartIcon}/>}
 				</IconButton>
-				<Typography variant="subtitle1">
+				<Typography variant="subtitle1" onClick={handleLike}>
 					{likes.length} {likes.length === 1 ? "like" : "likes"}
 				</Typography>
 				<IconButton edge="end" onClick={() => onExpand(id)}>
 					<MessageIcon className={classes.commentIcon}/>
 				</IconButton>
 				<Typography variant="subtitle1">
-					0 comments
+					{comments.length} {comments.length === 1 ? "comment" : "comments"}
 				</Typography>
 			</CardActions>
 			{expanded && commentSection}

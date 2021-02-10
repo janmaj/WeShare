@@ -60,6 +60,7 @@ const reducer = (state = defaultState, action) => {
 			}
 		case actionTypes.UPDATE_POST_FAIL:
 			return {
+				...state,
 				error: action.error
 			}
 		case actionTypes.RESET_CLEAR_INPUT:
