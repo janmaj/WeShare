@@ -20,7 +20,7 @@ const reducer = (state = defaultState, action) => {
 			return {
 				...state,
 				loadingSubmit: false,
-				posts: [...state.posts, action.post],
+				posts: [action.post, ...state.posts],
 				clearInput: true
 			};
 		case actionTypes.ADD_POST_FAIL:

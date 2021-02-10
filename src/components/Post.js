@@ -103,7 +103,7 @@ const Post = ({id, author, createdAt, content, likes, comments, updatePost, user
 					variant="filled" 
 					fullWidth 
 					size="small" 
-					placeholder="Your comment goes here" 
+					placeholder="Spark a discussion!" 
 					multiline rowsMax={3} 
 					value={commentContents} 
 					onChange={e => setCommentContents(e.target.value)}/>

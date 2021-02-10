@@ -22,9 +22,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
 	},
 	inputField:{
-		width: "25em",
-    [theme.breakpoints.down('md')]:{
-      width: "20em"
+    [theme.breakpoints.up('lg')]:{
+      width: "31em"
     },
     [theme.breakpoints.down('sm')]:{
       width: "35em"
@@ -32,7 +31,8 @@ const useStyles = makeStyles((theme) => ({
 	},
 	submitButton:{
     borderRadius: 30,
-    width: 100
+    width: 100,
+    margin: "auto"
 	}
 }));
 
@@ -76,22 +76,23 @@ const NewPost = ({onSubmit, loading, userName, clearInput, resetClearInput, ...p
             container
             justify="center"
             direction="column"
-            alignItems="center"
+            alignItems="stretch"
             spacing={2}
           >
-            <Grid item>
+            <Grid item container justify="center">
               <TextField
                 placeholder="Share your thoughts with the world"
                 variant="filled"
                 multiline
 								rows={4}
 								rowsMax={10}
+                fullWidth
                 className={classes.inputField}
                 value={postContents}
                 onChange={e => setPostContents(e.target.value)}
               />
             </Grid>
-            <Grid item>
+            <Grid item container justify="center">
               <Button variant="contained" color="secondary" className={classes.submitButton} disabled={postContents.trim().length === 0} onClick={handleSubmit}>
                 {loading ? <CircularProgress size={20}/> : "Submit"}
               </Button>

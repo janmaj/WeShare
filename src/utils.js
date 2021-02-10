@@ -1,5 +1,5 @@
 export const calculatePostAge = (timestamp) => {
-	const minutes = (new Date().getTime()/1000 - timestamp.seconds)/60;
+	const minutes = ((new Date().getTime()/1000 - timestamp.seconds)/60) || 0;
 	if(minutes < 60){
 		return Math.ceil(minutes) + "min ago";
 	}
