@@ -172,7 +172,7 @@ const Signup = ({error, redirectPath, loading, handleRegister, clearRedirectPath
       repPasswordHelper === "" &&
       usernameHelper === ""
     );
-  }
+  };
 
   useEffect(() => {
     validateEmail();
@@ -180,6 +180,13 @@ const Signup = ({error, redirectPath, loading, handleRegister, clearRedirectPath
     validateRepPassword();
     validateUsername();
   }, [email, password, repPassword, validateEmail, validatePassword, validateRepPassword, validateUsername]);
+
+  const handleKeyDown = event => {
+    if(event.keyCode === 13 && validateForm()){
+      event.preventDefault();
+      handleRegister(email, password, username);
+    }
+  };
 
   return (
     <React.Fragment>
@@ -194,7 +201,7 @@ const Signup = ({error, redirectPath, loading, handleRegister, clearRedirectPath
         <Typography variant="h1" className={classes.pageTitle}>Sign Up Now!</Typography>
         <Typography variant="h2" className={classes.pageSubtitle}>We can't wait to have You onboard</Typography>
       </Grid>
-      <Paper className={classes.formContainer} elevation={6}>
+      <Paper className={classes.formContainer} elevation={6} onKeyDown={handleKeyDown}>
         <Grid
           container
           direction="column"

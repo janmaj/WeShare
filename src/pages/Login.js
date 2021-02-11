@@ -103,6 +103,14 @@ const Login = ({redirectPath, loading, error, handleLogin, clearError, clearRedi
     }
   }, [history, clearRedirectPath, redirectPath]);
 
+  const handleKeyDown= event => {
+    console.log("keyDown");
+    if(event.keyCode === 13){
+      event.preventDefault();
+      handleLogin(email, password);
+    }
+  };
+
   return (
     <React.Fragment>
       <Navbar activeTab={1} />
@@ -116,7 +124,7 @@ const Login = ({redirectPath, loading, error, handleLogin, clearError, clearRedi
         <Typography variant="h1" className={classes.pageTitle}>Jump Back In!</Typography>
         <Typography variant="h2" className={classes.pageSubtitle}>It's great to see You again</Typography>
       </Grid>
-      <Paper className={classes.formContainer} elevation={6}>
+      <Paper className={classes.formContainer} elevation={6} onKeyDown={handleKeyDown}>
         <Grid
           container
           direction="column"

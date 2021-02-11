@@ -22,6 +22,8 @@ import {calculatePostAge} from '../utils';
 import * as actions from '../store/actions';
 import Comment from './Comment';
 
+const MAX_COMMENT_LENGTH = 500;
+
 const useStyles = makeStyles(theme => ({
 	avatar:{
 		width: 60,
@@ -89,6 +91,13 @@ const Post = ({id, author, createdAt, content, likes, comments, updatePost, user
 		updatePost(id, updatedPost);
 	};
 
+	const handleKeyDown = event => {
+    if(event.keyCode === 13 && commentContents.length > 1){
+      event.preventDefault();
+      handleComment();
+    }
+  }
+
 	const trashIcon = (
 		<Box style={{marginLeft: "auto"}}>
 			<IconButton onClick={() => deletePost(id)}>
@@ -118,9 +127,13 @@ const Post = ({id, author, createdAt, content, likes, comments, updatePost, user
 					fullWidth 
 					size="small" 
 					placeholder="Spark a discussion!" 
-					multiline rowsMax={3} 
+					multiline
+					autoFocus
+					onKeyDown={handleKeyDown}
+					rowsMax={5}
+					helperText={`${commentContents.length}/${MAX_COMMENT_LENGTH}`} 
 					value={commentContents} 
-					onChange={e => setCommentContents(e.target.value)}/>
+					onChange={e => setCommentContents(e.target.value.slice(0, MAX_COMMENT_LENGTH))}/>
 				</Grid>
 				<Grid item xs={3} sm={2} container justify="center">
 					<Grid item>

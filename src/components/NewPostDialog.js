@@ -13,6 +13,8 @@ import {makeStyles} from '@material-ui/core/styles';
 
 import * as actions from '../store/actions';
 
+const MAX_POST_LENGTH = 1000;
+
 const useStyles = makeStyles(theme => ({
 	dialog:{
 		margin: 15,
@@ -50,6 +52,13 @@ const NewPostDialog = props =>{
     };
     props.onSubmit(post);
   };
+
+	const handleKeyDown = event => {
+    if(event.keyCode === 13 && postContents.length > 1){
+      event.preventDefault();
+      handleSubmit();
+    }
+  }
 	
 	return (
     <Dialog open={props.open} onClose={props.onClose} PaperProps={{classes: {root: classes.dialog}}}>
@@ -65,10 +74,12 @@ const NewPostDialog = props =>{
 							variant="filled"
 							className={classes.textField}
 							multiline
+							helperText={`${postContents.length}/${MAX_POST_LENGTH}`}
+							onKeyDown={e => handleKeyDown(e)}
 							rows={4}
 							rowsMax={10}
 							value={postContents}
-							onChange={e => setPostContents(e.target.value)}
+							onChange={e => setPostContents(e.target.value.slice(0, MAX_POST_LENGTH))}
 						/>
 					</Grid>
 				</Grid>

@@ -11,6 +11,8 @@ import {connect} from 'react-redux';
 
 import * as actions from '../store//actions';
 
+const MAX_POST_LENGTH = 1000;
+
 const useStyles = makeStyles((theme) => ({
   newPostContainer: {
     width: "inherit",
@@ -70,6 +72,13 @@ const NewPost = ({onSubmit, loading, userName, localId, clearInput, resetClearIn
     onSubmit(post);
   };
 
+  const handleKeyDown = event => {
+    if(event.keyCode === 13 && postContents.length > 1){
+      event.preventDefault();
+      handleSubmit();
+    }
+  }
+
   return (
     <Grid
       container
@@ -98,9 +107,11 @@ const NewPost = ({onSubmit, loading, userName, localId, clearInput, resetClearIn
 								rows={4}
 								rowsMax={10}
                 fullWidth
+                onKeyDown={e => handleKeyDown(e)}
+                helperText={`${postContents.length}/${MAX_POST_LENGTH}`}
                 className={classes.inputField}
                 value={postContents}
-                onChange={e => setPostContents(e.target.value)}
+                onChange={e => setPostContents(e.target.value.slice(0, MAX_POST_LENGTH))}
               />
             </Grid>
             <Grid item container justify="center">
