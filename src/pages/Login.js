@@ -104,7 +104,6 @@ const Login = ({redirectPath, loading, error, handleLogin, clearError, clearRedi
   }, [history, clearRedirectPath, redirectPath]);
 
   const handleKeyDown= event => {
-    console.log("keyDown");
     if(event.keyCode === 13){
       event.preventDefault();
       handleLogin(email, password);

@@ -68,7 +68,6 @@ const Post = ({id, author, createdAt, content, likes, comments, updatePost, user
 	const [commentContents, setCommentContents] = useState('');
 	
 	const handleLike = () => {
-		console.log('post liked');
 		const updatedPost = {author, content, createdAt, comments, id};
 		let updatedLikes;
 		if(likes.includes(localId)){

@@ -11,7 +11,6 @@ export const registerUser = (email, password, username) => {
 		dispatch(registerStart());
 		try{
 			const takenUsernames = await db.collection('usernames').where('name', '==', username).get();
-			console.log(takenUsernames);
 			if(takenUsernames.docs.length > 1){
 				throw new Error('USERNAME_TAKEN');
 			}
@@ -30,7 +29,6 @@ export const registerUser = (email, password, username) => {
 			if(error.response && error.response.data.error.errors[0].message === 'EMAIL_EXISTS'){
 				error.message = 'EMAIL_EXISTS';
 			}
-			console.log(error.response)
 			dispatch(registerFail(error));
 		}
 	}
