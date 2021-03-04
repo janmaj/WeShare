@@ -1,10 +1,10 @@
-import firebase from 'firebase';
-import 'firebase/firestore';
+import firebase from "firebase";
+import "firebase/firestore";
 
 firebase.initializeApp({
-	apiKey: "AIzaSyB3b_Y9pmVLPn2KyiAxQ7NitJ2obeYRSm0",
-	authDomain: "weshare-8c49d.firebaseapp.com",
-	projectId: "weshare-8c49d"
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
 });
 
 const db = firebase.firestore();

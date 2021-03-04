@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme) => ({
     background: `url(${heroBackground})`,
     backgroundSize: "cover",
     backgroundPosition: "left",
+    backgroundAttachment: "fixed",
     padding: "2em 1em",
     minHeight: "30em",
     height: "calc(100vh - 80px)",
@@ -31,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
     },
     [theme.breakpoints.up("sm")]: {
       fontSize: "6rem",
+    },
+    [theme.breakpoints.up("lg")]: {
+      fontSize: "8rem",
     },
   },
   infoSection: {
@@ -163,7 +167,7 @@ const Home = () => {
             container
             direction="column"
             alignItems="center"
-            spacing="1"
+            spacing={1}
             md={5}
           >
             <Grid item>
