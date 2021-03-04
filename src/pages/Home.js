@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../components/Navbar";
-import { Button, Grid, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Button, Grid, Typography, useMediaQuery } from "@material-ui/core";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 import heroBackground from "../assets/home-hero.jpg";
 import ctaBackground from "../assets/home-cta.jpg";
@@ -13,11 +13,18 @@ const useStyles = makeStyles((theme) => ({
     backgroundPosition: "left",
     padding: "2em 1em",
     minHeight: "30em",
+    overflow: "hidden",
     height: "calc(100vh - 80px)",
+    display: "flex",
+    alignItems: "center",
+    [theme.breakpoints.up("lg")]: {
+      backgroundPosition: "right top",
+    },
   },
   heroContainer: {
     maxWidth: 1280,
-    height: "100%",
+    width: "100%",
+    margin: "auto",
   },
   heroTitle: {
     color: "white",
@@ -26,10 +33,18 @@ const useStyles = makeStyles((theme) => ({
     "@media (min-width: 450px)": {
       fontSize: "4rem",
     },
+    [theme.breakpoints.up("sm")]: {
+      fontSize: "6rem",
+    },
   },
   infoSection: {
     boxShadow: "inset 2px 2px 2px rgba(0,0,0,.25)",
-    padding: "2em 1em",
+    padding: "2em 2em",
+  },
+  infoContainer: {
+    maxWidth: 1280,
+    margin: "auto",
+    width: "100%",
   },
   infoTitle: {
     fontFamily: "Roboto, sans-serif",
@@ -48,19 +63,38 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "50ch",
   },
   ctaSection: {
-    padding: "2em 1em",
+    padding: "2em 2em",
+    overflow: "hidden",
     background: `url(${ctaBackground})`,
-    backgroundColor: "rgba(255,255,255,0.5)",
+    backgroundColor: "rgba(255,255,255,0.6)",
     backgroundBlendMode: "lighten",
     backgroundRepeat: "no-repeat",
-    backgroundAttachment: "fixed",
+    backgroundSize: "800px",
+    backgroundPosition: "top -10em left -5em",
+    "@media (min-width: 500px)": {
+      backgroundSize: "1000px",
+      backgroundPosition: "top -20em left -1em",
+    },
+    [theme.breakpoints.up("md")]: {
+      backgroundSize: "cover",
+      backgroundPosition: "center center",
+    },
+    // backgroundAttachment: "fixed",
+  },
+  ctaContainer: {
+    maxWidth: 1280,
+    margin: "auto",
+    width: "100%",
   },
   ctaTitle: {
     lineHeight: "100%",
     color: "#050831",
     fontSize: "3rem",
-    "@media (min-width: 450px)": {
+    "@media (min-width: 500px)": {
       fontSize: "4rem",
+    },
+    [theme.breakpoints.up("sm")]: {
+      fontSize: "5rem",
     },
   },
   footer: {
@@ -68,11 +102,12 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
     textAlign: "center",
   },
-  button: {},
 }));
 
 const Home = (props) => {
   const classes = useStyles();
+  const theme = useTheme();
+  const mdUp = useMediaQuery(theme.breakpoints.up("md"));
 
   return (
     <>
@@ -82,15 +117,14 @@ const Home = (props) => {
           container
           className={classes.heroContainer}
           spacing={4}
-          direction="column"
           justify="center"
           alignItems="center"
         >
-          <Grid item>
+          <Grid item xs={12}>
             <Typography
               variant="h1"
               className={classes.heroTitle}
-              align="center"
+              align={mdUp ? "left" : "center"}
             >
               Social Media
               <br />
@@ -100,7 +134,7 @@ const Home = (props) => {
           <Grid
             item
             container
-            direction="column"
+            direction={mdUp ? "row" : "column"}
             alignItems="center"
             spacing={2}
           >
@@ -131,10 +165,10 @@ const Home = (props) => {
         <Grid
           container
           className={classes.infoContainer}
-          spacing="4"
-          justify="center"
+          spacing={mdUp ? 10 : 4}
+          justify="space-between"
         >
-          <Grid item>
+          <Grid item xs={12}>
             <Typography
               variant="h2"
               className={classes.infoTitle}
@@ -149,6 +183,7 @@ const Home = (props) => {
             direction="column"
             alignItems="center"
             spacing="1"
+            md={5}
           >
             <Grid item>
               <Typography
@@ -177,6 +212,7 @@ const Home = (props) => {
             direction="column"
             alignItems="center"
             spacing="1"
+            md={5}
           >
             <Grid item>
               <Typography
@@ -205,6 +241,7 @@ const Home = (props) => {
             direction="column"
             alignItems="center"
             spacing="1"
+            md={5}
           >
             <Grid item>
               <Typography
@@ -234,6 +271,7 @@ const Home = (props) => {
             direction="column"
             alignItems="center"
             spacing="1"
+            md={5}
           >
             <Grid item>
               <Typography
@@ -262,14 +300,13 @@ const Home = (props) => {
         <Grid
           container
           className={classes.ctaContainer}
-          direction="column"
           alignItems="center"
           spacing={4}
         >
-          <Grid item>
+          <Grid item xs={12} md={6}>
             <Typography
               variant="h2"
-              align="center"
+              align={mdUp ? "left" : "center"}
               className={classes.ctaTitle}
             >
               Are you
@@ -277,9 +314,15 @@ const Home = (props) => {
               yet?
             </Typography>
           </Grid>
-          <Grid item>
+          <Grid
+            item
+            xs={12}
+            md={6}
+            container
+            justify={mdUp ? "flex-end" : "center"}
+          >
             <Button
-              className={classes.button}
+              className={classes.ctaButton}
               variant="contained"
               color="secondary"
               size="large"
