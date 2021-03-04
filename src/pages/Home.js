@@ -13,15 +13,11 @@ const useStyles = makeStyles((theme) => ({
     backgroundPosition: "left",
     padding: "2em 1em",
     minHeight: "30em",
-    overflow: "hidden",
     height: "calc(100vh - 80px)",
     display: "flex",
     alignItems: "center",
-    [theme.breakpoints.up("lg")]: {
-      backgroundPosition: "right top",
-    },
   },
-  heroContainer: {
+  container: {
     maxWidth: 1280,
     width: "100%",
     margin: "auto",
@@ -38,57 +34,39 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   infoSection: {
-    boxShadow: "inset 2px 2px 2px rgba(0,0,0,.25)",
-    padding: "2em 2em",
-  },
-  infoContainer: {
-    maxWidth: 1280,
-    margin: "auto",
-    width: "100%",
+    padding: "2em 1em",
   },
   infoTitle: {
     fontFamily: "Roboto, sans-serif",
     fontSize: "2.5rem",
     lineHeight: "100%",
-    color: "#050831",
+    color: theme.palette.common.darkBlue,
   },
   heading: {
     fontSize: "2rem",
     fontWeight: "bold",
-    color: "#050831",
+    color: theme.palette.common.darkBlue,
   },
   paragraph: {
-    color: "#133072",
+    color: theme.palette.common.blue,
     lineHeight: "160%",
     maxWidth: "50ch",
   },
   ctaSection: {
     padding: "2em 2em",
-    overflow: "hidden",
     background: `url(${ctaBackground})`,
     backgroundColor: "rgba(255,255,255,0.6)",
     backgroundBlendMode: "lighten",
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "800px",
-    backgroundPosition: "top -10em left -5em",
-    "@media (min-width: 500px)": {
-      backgroundSize: "1000px",
-      backgroundPosition: "top -20em left -1em",
-    },
+    backgroundSize: "1200px",
+    backgroundPosition: "bottom -20em left",
     [theme.breakpoints.up("md")]: {
       backgroundSize: "cover",
       backgroundPosition: "center center",
     },
-    // backgroundAttachment: "fixed",
-  },
-  ctaContainer: {
-    maxWidth: 1280,
-    margin: "auto",
-    width: "100%",
   },
   ctaTitle: {
     lineHeight: "100%",
-    color: "#050831",
+    color: theme.palette.common.darkBlue,
     fontSize: "3rem",
     "@media (min-width: 500px)": {
       fontSize: "4rem",
@@ -98,13 +76,14 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   footer: {
-    backgroundColor: "#050831",
+    backgroundColor: theme.palette.common.darkBlue,
     color: "white",
     textAlign: "center",
+    padding: 3,
   },
 }));
 
-const Home = (props) => {
+const Home = () => {
   const classes = useStyles();
   const theme = useTheme();
   const mdUp = useMediaQuery(theme.breakpoints.up("md"));
@@ -115,7 +94,7 @@ const Home = (props) => {
       <section className={classes.heroSection}>
         <Grid
           container
-          className={classes.heroContainer}
+          className={classes.container}
           spacing={4}
           justify="center"
           alignItems="center"
@@ -144,6 +123,7 @@ const Home = (props) => {
                 variant="contained"
                 color="secondary"
                 size="large"
+                href="/signup"
               >
                 Sign up now
               </Button>
@@ -154,6 +134,7 @@ const Home = (props) => {
                 className={classes.button}
                 color="secondary"
                 size="large"
+                href="#info"
               >
                 Learn more
               </Button>
@@ -161,10 +142,10 @@ const Home = (props) => {
           </Grid>
         </Grid>
       </section>
-      <section className={classes.infoSection}>
+      <section className={classes.infoSection} id="info">
         <Grid
           container
-          className={classes.infoContainer}
+          className={classes.container}
           spacing={mdUp ? 10 : 4}
           justify="space-between"
         >
@@ -299,7 +280,7 @@ const Home = (props) => {
       <section className={classes.ctaSection}>
         <Grid
           container
-          className={classes.ctaContainer}
+          className={classes.container}
           alignItems="center"
           spacing={4}
         >
@@ -326,6 +307,7 @@ const Home = (props) => {
               variant="contained"
               color="secondary"
               size="large"
+              href="/signup"
             >
               Join the community
             </Button>
