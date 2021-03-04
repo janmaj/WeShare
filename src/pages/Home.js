@@ -196,7 +196,7 @@ const Home = () => {
             container
             direction="column"
             alignItems="center"
-            spacing="1"
+            spacing={1}
             md={5}
           >
             <Grid item>
@@ -225,7 +225,7 @@ const Home = () => {
             container
             direction="column"
             alignItems="center"
-            spacing="1"
+            spacing={1}
             md={5}
           >
             <Grid item>
@@ -255,7 +255,7 @@ const Home = () => {
             container
             direction="column"
             alignItems="center"
-            spacing="1"
+            spacing={1}
             md={5}
           >
             <Grid item>
